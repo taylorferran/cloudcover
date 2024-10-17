@@ -1,0 +1,98 @@
+name: blocksense-hackaton
+services:
+  anvil-a:
+    image: ghcr.io/foundry-rs/foundry:nightly-0688b5ad19a637303c038d1a66aec62a73713e20
+    entrypoint: [ 'sh', '-c', 'anvil -p 8545 --host 0.0.0.0 --fork-url "wss://ethereum-sepolia-rpc.publicnode.com" --chain-id 99999999999' ]
+
+    ports:
+      - '8545:8545'
+    networks:
+      - backend
+    healthcheck:
+      test: wget http://0.0.0.0:8545 2>&1 | grep -c 'Bad Request' > /dev/null
+      interval: 5s
+      timeout: 5s
+      retries: 1
+
+  anvil-b:
+    image: ghcr.io/foundry-rs/foundry:nightly-0688b5ad19a637303c038d1a66aec62a73713e20
+    entrypoint: [ 'sh', '-c', 'anvil -p 8546 --host 0.0.0.0 --fork-url "wss://ethereum-sepolia-rpc.publicnode.com" --chain-id 99999999999' ]
+    ports:
+      - '8546:8546'
+    networks:
+      - backend
+    healthcheck:
+      test: wget http://0.0.0.0:8546 2>&1 | grep -c 'Bad Request' > /dev/null
+      interval: 5s
+      timeout: 5s
+      retries: 1
+
+  sequencer:
+    image: ymadzhunkov/blocksense_hackaton:sequencer-mac
+    ports:
+      - '8877:8877'
+      - '5555:5555'
+      - '5556:5556'
+    volumes:
+      - ./config/feeds_config.json:/usr/local/blocksense/feeds_config.json
+
+    networks:
+      - backend
+    healthcheck:
+      test: [ CMD-SHELL, 'wget http://0.0.0.0:8877 2>&1 | grep -c "ERROR 404: Not Found" > /dev/null' ]
+      interval: 5s
+      timeout: 5s
+      retries: 1
+    depends_on:
+      anvil-a:
+        condition: service_healthy
+      anvil-b:
+        condition: service_healthy
+      scdeploy-a:
+        condition: service_completed_successfully
+      scdeploy-b:
+        condition: service_completed_successfully
+
+  scdeploy-a:
+    image: ymadzhunkov/blocksense_hackaton:scdeploy-mac
+    environment:
+      - RPC_URL_LOCAL=http://anvil-a:8545
+    volumes:
+      - ./config/feeds_config.json:/usr/local/blocksense/config/feeds_config.json
+    networks:
+      - backend
+    depends_on:
+      anvil-a:
+        condition: service_healthy
+
+  scdeploy-b:
+    image: ymadzhunkov/blocksense_hackaton:scdeploy-mac
+    environment:
+      - RPC_URL_LOCAL=http://anvil-b:8546
+    volumes:
+      - ./config/feeds_config.json:/usr/local/blocksense/config/feeds_config.json
+    networks:
+      - backend
+    depends_on:
+      anvil-b:
+        condition: service_healthy
+
+  reporter:
+    image: ymadzhunkov/blocksense_hackaton:reporter-mac
+    networks:
+      - backend
+    volumes:
+      - ./examples/yahoo:/usr/local/blocksense/oracles/yahoo
+      - ./examples/revolut:/usr/local/blocksense/oracles/revolut
+      - ./examples/cmc:/usr/local/blocksense/oracles/cmc
+    entrypoint: [ '/bin/sh', '-c', 'cd /usr/local/blocksense/oracles/revolut && /spin up' ]
+    #entrypoint: ['/bin/sh', '-c', 'cd /usr/local/blocksense/oracles/yahoo && /spin up']
+    #entrypoint: ['/bin/sh', '-c', 'cd /usr/local/blocksense/oracles/cmc && /spin up']
+
+    depends_on:
+      sequencer:
+        condition: service_healthy
+
+networks:
+  backend:
+    driver: bridge
