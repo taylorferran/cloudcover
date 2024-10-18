@@ -1,5 +1,6 @@
+import { ViewPoliciesComponent } from "@/components/view-policies";
 import React from "react";
 
 export default function page() {
-  return <div>view page</div>;
+  return <ViewPoliciesComponent />;
 }

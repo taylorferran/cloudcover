@@ -5,6 +5,9 @@ import "@rainbow-me/rainbowkit/styles.css";
 
 import NavBar from "@/components/navBar";
 import { ContextProvider } from "./contextProvider";
+import Footer from "@/components/footer";
+import { Toaster, toast } from "sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,13 +35,18 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ContextProvider>
-          {/* Your App */}
-          <header className="px-4 lg:px-6 h-14 flex items-center">
-            <NavBar />
-          </header>
-          {children}
-        </ContextProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ContextProvider>
+            {/* Your App */}
+            <header className="px-4 lg:px-6 h-14 flex items-center">
+              <NavBar />
+            </header>
+            <main className="flex-1">{children}</main>
+            {/* {children} */}
+            <Footer />
+          </ContextProvider>
+          <Toaster richColors />
+        </ThemeProvider>
       </body>
     </html>
   );

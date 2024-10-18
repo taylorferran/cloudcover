@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Cloud } from "lucide-react";
 
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { ModeToggle } from "./ui/themeToggle";
 export default function NavBar() {
   return (
     <>
@@ -11,20 +12,11 @@ export default function NavBar() {
         <span className="ml-2 text-2xl font-bold">CloudCover</span>
       </Link>
       <nav className="ml-auto flex gap-4 items-center sm:gap-6">
-        <div className="flex gap-4 px-6">
-          <ConnectButton label="Connect wallet" />
-        </div>
         <Link
           className="text-sm font-medium hover:underline underline-offset-4"
-          href="#"
+          href="/flights"
         >
-          How It Works
-        </Link>
-        <Link
-          className="text-sm font-medium hover:underline underline-offset-4"
-          href="/view"
-        >
-          View Policies
+          View flights
         </Link>
         <Link
           className="text-sm font-medium hover:underline underline-offset-4"
@@ -34,10 +26,13 @@ export default function NavBar() {
         </Link>
         <Link
           className="text-sm font-medium hover:underline underline-offset-4"
-          href="#"
+          href="/view"
         >
-          Profile
+          View Policies
         </Link>
+
+        <ConnectButton label="Connect wallet" />
+        <ModeToggle />
       </nav>
     </>
   );
