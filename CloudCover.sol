@@ -9,12 +9,11 @@ interface IERC20 {
     function allowance(address owner, address spender) external view returns (uint256);
 }
 
-// Simplified Oracle interface to check flight status
 interface IFlightStatusOracle {
-    function getFlightStatus(string calldata flightNumber) external view returns (bool isCancelled);
+    function getFlightStatus() external view returns (string memory flightStatus);
 }
 
-contract CloudCover {
+contract FlightInsurance {
     address public oracleAddress;
     IFlightStatusOracle private oracle;
     IERC20 public usdcInstance;
@@ -32,7 +31,6 @@ contract CloudCover {
     }
 
     mapping(uint256 => InsurancePolicy) public policies;
-    InsurancePolicy[] public policyArray;
     uint256 public policyCount;
 
     constructor(address _oracleAddress, IERC20 _usdcInstance) {
@@ -41,7 +39,7 @@ contract CloudCover {
         usdcInstance = _usdcInstance;
     }
 
-// create insurance request
+    // Function to create a new insurance request (traveler)
     function createInsuranceRequest(string calldata flightNumber, uint256 coverageAmount) external {
         uint256 premium = (coverageAmount / 10);
 
@@ -63,53 +61,70 @@ contract CloudCover {
             paidOut: false
         });
 
-        policyArray.push(policies[policyCount]);
+        //policyArray.push(policies[policyCount]);
 
         // Transfer the premium to the contract
         bool success = usdcInstance.transferFrom(msg.sender, address(this), premium);
         require(success, "USDC transfer failed");
     }
 
-    // fund policy 
+
+    // Function for the investor to fund the insurance request using USDC
     function fundInsurance(uint256 policyId) external {
         InsurancePolicy storage policy = policies[policyId];
 
-        require(!policy.funded, "Insurance already funded");
+        require(!policy.funded, "Insurance is already funded");
         require(policy.traveler != msg.sender, "Traveler cannot fund their own insurance");
 
+        // Check if the provider has approved enough USDC for the contract to use
+        uint256 allowance = usdcInstance.allowance(msg.sender, address(this));
+        require(allowance >= policy.coverageAmount, "USDC allowance is not enough, please approve first.");
+
+        // Transfer the USDC from the provider to the contract
+        bool success = usdcInstance.transferFrom(msg.sender, address(this), policy.coverageAmount);
+        require(success, "USDC transfer failed");
+
+        // Update the policy
         policy.provider = payable(msg.sender);
         policy.funded = true;
         policy.active = true;
-
-        bool success = usdcInstance.transferFrom(msg.sender, address(this), policy.coverageAmount);
-        require(success, "USDC transfer failed");
     }
 
-    // settle payment 
-    function settleInsurance(uint256 policyId) external {
+    // Function to settle the insurance claim based on the oracle's flight status, using USDC
+    function settleInsurance(uint256 policyId, string memory _flightStatus) external {
         InsurancePolicy storage policy = policies[policyId];
 
         require(policy.active, "Insurance is not active");
         require(!policy.paidOut, "Insurance has already been settled");
 
-        // Call the oracle to check flight status
-        bool isCancelled = oracle.getFlightStatus(policy.flightNumber);
+        bool isCancelled;
+        bool isComplete;
+
+        if (keccak256(abi.encodePacked(_flightStatus)) == keccak256(abi.encodePacked("cancelled"))) {
+            isCancelled = true;
+        } else if (keccak256(abi.encodePacked(_flightStatus)) == keccak256(abi.encodePacked("landed"))) {
+            isComplete = true;
+        }
 
         if (isCancelled) {
-            // If flight is cancelled, payout the coverage amount to the traveler
-            bool success = usdcInstance.transfer(policy.traveler, policy.coverageAmount + policy.premium);
-            require(success, "Payout to traveler failed");
+            // If flight is cancelled, payout the coverage amount + premium to the traveler in USDC
+            uint256 payoutAmount = policy.coverageAmount + policy.premium;
+            bool success = usdcInstance.transfer(policy.traveler, payoutAmount);
+            require(success, "USDC transfer to traveler failed");
+            policy.paidOut = true;
+        } else if (isComplete) {
+            // If flight completes, refund the premium to the provider in USDC
+            bool success = usdcInstance.transfer(policy.provider, policy.premium);
+            require(success, "USDC refund to provider failed");
             policy.paidOut = true;
         } else {
-            // If flight is not cancelled, refund the premium to the provider
-            bool success = usdcInstance.transfer(policy.provider, policy.premium);
-            require(success, "Refund to provider failed");
-            policy.paidOut = true;
+            revert("Flight still active");
         }
 
         policy.active = false;
     }
 
-    // Fallback to receive any excess ETH
-    receive() external payable {}
-}
+
+        // Fallback to receive any excess ETH
+        receive() external payable {}
+    }
