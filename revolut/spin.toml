@@ -16,19 +16,16 @@ component = "revolut-api-fetcher"
 
 [[trigger.oracle.data_feeds]]
 id = "47"
-data = "ETHUSD"
+data = "USD/ETH"
 
 [[trigger.oracle.data_feeds]]
 id = "31"
-data = "BTCUSD"
-
-[[trigger.oracle.data_feeds]]
-id = "253"
-data = "EURUSD"
-
+data = "USD/BTC"
 
 [component.revolut-api-fetcher]
 source = "target/wasm32-wasi/release/revolut_oracle.wasm"
-allowed_outbound_hosts = ["https://www.revolut.com"]
+allowed_outbound_hosts = [
+  "https://www.revolut.com",
+]
 [component.revolut-api-fetcher.build]
 command = "cargo build --target wasm32-wasi --release"

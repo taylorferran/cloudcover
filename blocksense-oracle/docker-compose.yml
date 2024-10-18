@@ -84,8 +84,10 @@ services:
     volumes:
       - ./examples/yahoo:/usr/local/blocksense/oracles/yahoo
       - ./examples/revolut:/usr/local/blocksense/oracles/revolut
+      - ./examples/aviationstack:/usr/local/blocksense/oracles/aviationstack
       - ./examples/cmc:/usr/local/blocksense/oracles/cmc
-    entrypoint: [ '/bin/sh', '-c', 'cd /usr/local/blocksense/oracles/revolut && /spin up' ]
+    entrypoint: [ '/bin/sh', '-c', 'cd /usr/local/blocksense/oracles/aviationstack && /spin up' ]
+    #entrypoint: [ '/bin/sh', '-c', 'cd /usr/local/blocksense/oracles/revolut && /spin up' ]
     #entrypoint: ['/bin/sh', '-c', 'cd /usr/local/blocksense/oracles/yahoo && /spin up']
     #entrypoint: ['/bin/sh', '-c', 'cd /usr/local/blocksense/oracles/cmc && /spin up']
 

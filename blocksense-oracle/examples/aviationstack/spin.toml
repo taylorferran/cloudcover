@@ -12,23 +12,14 @@ secret_key = "536d1f9d97166eba5ff0efb8cc8dbeb856fb13d2d126ed1efc761e9955014003"
 reporter_id = 0
 
 [[trigger.oracle]]
-component = "revolut-api-fetcher"
-
-[[trigger.oracle.data_feeds]]
-id = "47"
-data = "ETHUSD"
+component = "aviationstack-api-fetcher"
 
 [[trigger.oracle.data_feeds]]
 id = "31"
-data = "BTCUSD"
+data = "FR1730"
 
-[[trigger.oracle.data_feeds]]
-id = "253"
-data = "EURUSD"
-
-
-[component.revolut-api-fetcher]
-source = "target/wasm32-wasi/release/revolut_oracle.wasm"
-allowed_outbound_hosts = ["https://www.revolut.com"]
-[component.revolut-api-fetcher.build]
+[component.aviationstack-api-fetcher]
+source = "target/wasm32-wasi/release/aviationstack_oracle.wasm"
+allowed_outbound_hosts = ["https://api.aviationstack.com:443"]
+[component.aviationstack-api-fetcher.build]
 command = "cargo build --target wasm32-wasi --release"
