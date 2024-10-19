@@ -41,6 +41,11 @@ Travelers request flight insurance by locking in a small premium. Investors, in 
 
 ---
 
+## Project Architecture 
+
+<img width="1632" alt="image" src="https://github.com/user-attachments/assets/ee371d6d-80fe-41fb-b1c2-73f8ca1e467a">
+
+
 ## Features
 
 - **Peer-to-Peer Flight Insurance**: Connect travelers seeking flight insurance with investors willing to fund policies.
