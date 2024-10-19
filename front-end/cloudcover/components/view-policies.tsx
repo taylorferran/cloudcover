@@ -113,6 +113,26 @@ export function ViewPoliciesComponent() {
         signer
       );
 
+      const usdcAddress = "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238";
+
+      const usdcContract = new ethers.Contract(
+        usdcAddress,
+        [
+          "function approve(address spender, uint256 amount) external returns (bool)",
+        ],
+        signer
+      );
+
+      console.log("Approving USDC spending...");
+      const approvalTx = await usdcContract.approve(
+        contractAddress,
+        100000000000,
+      );
+      console.log("Waiting for approval transaction to confirm...");
+      await approvalTx.wait();
+      console.log("Approval confirmed!");
+
+
       // You might want to add USDC approval here if not done elsewhere
       const tx = await contract.fundInsurance(policyId);
       await tx.wait();
