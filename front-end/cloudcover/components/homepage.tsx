@@ -13,7 +13,7 @@ import {
 import Link from "next/link";
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 import FeaturesSectionDemo from "@/components/blocks/features-section-demo-2";
-import hero from "@/app/public/images/hero_img.png"
+import hero from "@/app/public/images/newhero.png"
 import Image from "next/image";
 
 export function HomepageComponent() {
