@@ -30,12 +30,12 @@ export default function NavBar() {
                 </Link>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
-                <Link
+                {/* <Link
                   href="/flights"
                   className="text-slate-950 hover:bg-slate-950 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
                   View flights
-                </Link>
+                </Link> */}
                 <Link
                   href="/create"
                   className="text-slate-950 dark:text-white hover:bg-slate-950 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
