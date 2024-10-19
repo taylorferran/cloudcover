@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useEffect, SetStateAction, use } from "react";
+import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { Button } from "@/components/ui/button";
 
 import { Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { HoverEffect } from "./ui/card-hover-effect";
 import { SkeletonCard } from "./ui/skeletonCard";
 import { Badge } from "./ui/badge";
@@ -284,8 +283,12 @@ export function ViewPoliciesComponent() {
         <HoverEffect items={policyItems} className="w-full">
           {(item) => (
             <div className="p-2">
-              {/* <Badge>Type</Badge> */}
-              <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
+              <Badge>
+                {item.provider === ethers.constants.AddressZero
+                  ? "Traveler"
+                  : "Provider"}
+              </Badge>
+              <h3 className="text-xl font-semibold my-2">{item.title}</h3>
               <div className="text-sm mb-4">{item.description}</div>
               {userAddress &&
                 item.traveler &&

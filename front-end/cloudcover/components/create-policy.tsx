@@ -52,7 +52,7 @@ const contractABI = [
 // FlightInsurance contract address
 const contractAddress = "0x415B56a8B3B80b914Bb790ACFF979e28b12e1955";
 
-// USDC contract address (replace with actual address)
+// USDC contract address
 const usdcAddress = "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238";
 
 const loadingStates = [

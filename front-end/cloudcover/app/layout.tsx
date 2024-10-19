@@ -23,6 +23,14 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "CloudCover",
   description: "Decentralized Flight Insurance",
+  icons: {
+    icon: [
+      {
+        url: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='white'>☁</text></svg>",
+        type: "image/svg+xml",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -37,12 +45,10 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <ContextProvider>
-            {/* Your App */}
             <header className="h-16 flex items-center">
               <NavBar />
             </header>
             <main className="flex-1">{children}</main>
-            {/* {children} */}
             <Footer />
           </ContextProvider>
           <Toaster richColors />

@@ -13,7 +13,7 @@ import {
 import Link from "next/link";
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 import FeaturesSectionDemo from "@/components/blocks/features-section-demo-2";
-import hero from "@/app/public/images/newhero.png"
+import hero from "@/app/public/images/newhero.png";
 import Image from "next/image";
 
 export function HomepageComponent() {
@@ -21,9 +21,9 @@ export function HomepageComponent() {
     <div className="flex flex-col min-h-screen">
       <BackgroundGradientAnimation className="h-auto">
         <div className="relative isolate pt-14">
-          <div className="mx-auto max-w-7xl lg:flex lg:items-center lg:gap-x-10 lg:px-8">
-            <div className="mx-auto max-w-2xl lg:mx-0 lg:flex-auto">
-              <h1 className="mt-10 max-w-lg text-4xl font-bold tracking-tight text-white sm:text-6xl">
+          <div className="mx-auto max-w-7xl lg:flex lg:items-start lg:gap-x-10 lg:px-8">
+            <div className="mx-auto max-w-2xl px-6 lg:px-0 lg:mx-0 lg:flex-auto lg:pt-20">
+              <h1 className="max-w-lg text-4xl font-bold tracking-tight text-white sm:text-6xl">
                 Decentralized Peer-to-Peer Flight Insurance on Ethereum
               </h1>
 
@@ -33,12 +33,12 @@ export function HomepageComponent() {
                 cancellations.
               </p>
               <div className="mt-10 flex items-center gap-x-6">
-                <Link href="/create-policy">
+                <Link href="/create">
                   <Button className="font-semibold">Get Started</Button>
                 </Link>
               </div>
             </div>
-            <div className="mt-16 mb-6 sm:mt-24 lg:mt-0 lg:flex-shrink-0 lg:flex-grow">
+            <div className="my-8 sm:mt-24 lg:mt-0 lg:flex-shrink-0 lg:flex-grow">
               <svg
                 role="img"
                 viewBox="0 0 366 729"
@@ -64,11 +64,7 @@ export function HomepageComponent() {
                   clipPath="url(#2ade4387-9c63-4fc4-b754-10e687a0d332)"
                   transform="translate(24 24)"
                 >
-                  <Image
-                  priority
-                    alt="hero"
-                  src={hero}
-                  />
+                  <Image priority alt="hero" src={hero} />
                 </foreignObject>
               </svg>
             </div>
@@ -140,7 +136,7 @@ export function HomepageComponent() {
             <div className="grid gap-6 lg:grid-cols-3 lg:gap-12">
               <div className="flex flex-col items-center space-y-4">
                 <Smartphone className="h-12 w-12 text-blue-500" />
-                <h3 className="text-xl font-bold">1. Request Insurance</h3>
+                <h3 className="text-xl font-bold">Request Insurance</h3>
                 <p className="text-gray-500 dark:text-gray-400 text-center">
                   Enter your flight details, select coverage, and pay a premium
                   through our app.
@@ -148,7 +144,7 @@ export function HomepageComponent() {
               </div>
               <div className="flex flex-col items-center space-y-4">
                 <Shield className="h-12 w-12 text-green-500" />
-                <h3 className="text-xl font-bold">2. Get Covered</h3>
+                <h3 className="text-xl font-bold">Get Covered</h3>
                 <p className="text-gray-500 dark:text-gray-400 text-center">
                   If an investor funds your policy, you&apos;re covered
                   instantly. No middlemen, no delays.
@@ -156,7 +152,7 @@ export function HomepageComponent() {
               </div>
               <div className="flex flex-col items-center space-y-4">
                 <Plane className="h-12 w-12 text-red-500" />
-                <h3 className="text-xl font-bold">3. Automatic Payout</h3>
+                <h3 className="text-xl font-bold">Automatic Payout</h3>
                 <p className="text-gray-500 dark:text-gray-400 text-center">
                   If your flight is canceled, receive an instant payout to your
                   crypto wallet via smart contract.
@@ -171,7 +167,7 @@ export function HomepageComponent() {
             <div className="grid gap-6 lg:grid-cols-3 lg:gap-12">
               <div className="flex flex-col items-center space-y-4">
                 <Search className="h-12 w-12 text-yellow-500" />
-                <h3 className="text-xl font-bold">1. Browse Policies</h3>
+                <h3 className="text-xl font-bold">Browse Policies</h3>
                 <p className="text-gray-500 dark:text-gray-400 text-center">
                   Explore available insurance requests and choose flights to
                   insure.
@@ -179,7 +175,7 @@ export function HomepageComponent() {
               </div>
               <div className="flex flex-col items-center space-y-4">
                 <DollarSign className="h-12 w-12 text-purple-500" />
-                <h3 className="text-xl font-bold">2. Fund Insurance</h3>
+                <h3 className="text-xl font-bold">Fund Insurance</h3>
                 <p className="text-gray-500 dark:text-gray-400 text-center">
                   Fund policies for flights you believe will land on time and
                   earn premium profits.
@@ -187,7 +183,7 @@ export function HomepageComponent() {
               </div>
               <div className="flex flex-col items-center space-y-4">
                 <Coins className="h-12 w-12 text-orange-500" />
-                <h3 className="text-xl font-bold">3. Earn Returns</h3>
+                <h3 className="text-xl font-bold">Earn Returns</h3>
                 <p className="text-gray-500 dark:text-gray-400 text-center">
                   If the flight lands as scheduled, the premium is paid to you
                   as profit. If it&apos;s canceled, the traveler gets the
