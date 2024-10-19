@@ -34,7 +34,7 @@ Travelers request flight insurance by locking in a small premium. Investors, in 
 ### For Travelers:
 1. **Request Insurance**: Enter your flight details, coverage amount, and pay a premium.
 2. **Get Covered**: If an investor funds your policy, you're covered. If the flight gets canceled, you'll receive an instant payout.
-3. **Automated Payout**: If the flight is canceled, you get paid automatically via smart contracts. No claims, no paperwork.
+3. **Automated Payout**: If the flight is canceled, you can claim automatically via smart contracts.
 
 ### For Investors:
 1. **Browse Policies**: Browse available insurance requests and choose which flights you want to insure.
@@ -96,7 +96,7 @@ This contract handles the following:
 - **Creating Insurance Requests**: Travelers can create an insurance request with flight details, coverage amount, and premium.
 - **Funding Insurance**: Investors fund insurance policies and lock up the coverage amount.
 - **Oracle Integration**: Decentralized oracles track real-time flight statuses to determine payouts.
-- **Automatic Payouts**: If a flight is canceled, the traveler gets paid automatically, while the investor earns the premium if the flight lands as scheduled.
+- **Automatic Payouts**: If a flight is canceled, the traveler's payment is sorted automatically, while the investor earns the premium if the flight lands as scheduled.
 
 ### Oracle Integration
 CloudCover uses decentralized oracles (e.g., Chainlink/Blocksense) to track real-time flight status. The flight status is fed into the smart contract, which triggers automatic payouts based on the oracle's data.
