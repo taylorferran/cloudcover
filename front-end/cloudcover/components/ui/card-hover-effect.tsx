@@ -18,6 +18,7 @@ export const HoverEffect = ({
     link: string;
     id: number;
     disabled: boolean;
+    flightNumber: string;
   }[];
   className?: string;
   children: (item: {
@@ -30,6 +31,7 @@ export const HoverEffect = ({
     link: string;
     id: number;
     disabled: boolean;
+    flightNumber: string;
   }) => React.ReactNode;
 }) => {
   let [hoveredIndex, setHoveredIndex] = useState<number | null>(null);

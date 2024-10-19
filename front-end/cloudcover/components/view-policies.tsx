@@ -44,11 +44,15 @@ const contractABI = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "uint256", name: "policyId", type: "uint256" }],
-    name: "initiateSettlement",
-    outputs: [],
+    inputs: [
+      { internalType: "uint64", name: "subscriptionId", type: "uint64" },
+      { internalType: "string[]", name: "args", type: "string[]" },
+      { internalType: "uint256", name: "policyId", type: "uint256" }
+    ],
+    name: "sendRequest",
+    outputs: [{ internalType: "bytes32", name: "requestId", type: "bytes32" }],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "function"
   },
 ];
 const contractAddress = "0x415B56a8B3B80b914Bb790ACFF979e28b12e1955";
@@ -197,7 +201,7 @@ export function ViewPoliciesComponent() {
     }
   };
 
-  const handleSettlePolicy = async (policyId: number) => {
+  const handleSettlePolicy = async (policyId: number, flightNumber: string) => {
     setProcessingPolicy(policyId);
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -208,7 +212,7 @@ export function ViewPoliciesComponent() {
         signer
       );
 
-      const tx = await contract.initiateSettlement(policyId);
+      const tx = await contract.sendRequest(3670, [flightNumber], policyId);
       await tx.wait();
 
       await fetchPolicies();
@@ -264,6 +268,7 @@ export function ViewPoliciesComponent() {
     funded: policy.funded,
     active: policy.active,
     paidOut: policy.paidOut,
+    flightNumber: policy.flightNumber,
   }));
 
   return (
@@ -309,7 +314,7 @@ export function ViewPoliciesComponent() {
                 !item.paidOut && (
                   <Button
                     className="w-full"
-                    onClick={() => handleSettlePolicy(item.id)}
+                    onClick={() => handleSettlePolicy(item.id, item.flightNumber)}
                     disabled={processingPolicy === item.id}
                   >
                     {processingPolicy === item.id ? (
