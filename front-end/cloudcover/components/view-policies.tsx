@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, SetStateAction } from "react";
+import { useState, useEffect, SetStateAction, use } from "react";
 import { ethers } from "ethers";
 import { Button } from "@/components/ui/button";
 
@@ -8,6 +8,7 @@ import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { HoverEffect } from "./ui/card-hover-effect";
 import { SkeletonCard } from "./ui/skeletonCard";
+import { Badge } from "./ui/badge";
 
 const contractABI = [
   {
@@ -42,30 +43,58 @@ const contractABI = [
     stateMutability: "view",
     type: "function",
   },
+  {
+    inputs: [{ internalType: "uint256", name: "policyId", type: "uint256" }],
+    name: "initiateSettlement",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
 ];
-
 const contractAddress = "0x415B56a8B3B80b914Bb790ACFF979e28b12e1955";
 
+interface InsurancePolicy {
+  policyNumber: number;
+  traveler: string;
+  provider: string;
+  premium: string;
+  coverageAmount: string;
+  flightNumber: string;
+  funded: boolean;
+  active: boolean;
+  paidOut: boolean;
+  requestID: string;
+}
+
 export function ViewPoliciesComponent() {
-  const [policies, setPolicies] = useState<
-    {
-      id: number;
-      flightNumber: string;
-      costToCover: string;
-      premium: string;
-      funded: boolean;
-      active: boolean;
-      paidOut: boolean;
-    }[]
-  >([]);
+  const [policies, setPolicies] = useState<InsurancePolicy[]>([]);
+  const [filteredPolicies, setFilteredPolicies] = useState<InsurancePolicy[]>(
+    []
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [processingPolicy, setProcessingPolicy] = useState<number | null>(null);
+  const [userAddress, setUserAddress] = useState<string | null>(null);
+  const [showUserPolicies, setShowUserPolicies] = useState(false);
 
   useEffect(() => {
     fetchPolicies();
+    connectWallet();
   }, []);
 
+  const connectWallet = async () => {
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      const address = await signer.getAddress();
+      console.log("Connected wallet address:", address);
+      setUserAddress(address);
+    } catch (err) {
+      console.error("Failed to connect wallet:", err);
+      setError("Failed to connect wallet. Please try again.");
+    }
+  };
   const fetchPolicies = async () => {
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -80,20 +109,23 @@ export function ViewPoliciesComponent() {
 
       for (let i = 1; i <= policyCount; i++) {
         const policy = await contract.policies(i);
-        if (!policy.funded && !policy.active && !policy.paidOut) {
-          fetchedPolicies.push({
-            id: policy.policyNumber.toNumber(),
-            flightNumber: policy.flightNumber,
-            costToCover: ethers.utils.formatUnits(policy.coverageAmount, 6), // Assuming USDC with 6 decimals
-            premium: ethers.utils.formatUnits(policy.premium, 6),
-            funded: policy.funded,
-            active: policy.active,
-            paidOut: policy.paidOut,
-          });
-        }
+        fetchedPolicies.push({
+          policyNumber: policy.policyNumber.toNumber(),
+          traveler: policy.traveler,
+          provider: policy.provider,
+          premium: ethers.utils.formatUnits(policy.premium, 6),
+          coverageAmount: ethers.utils.formatUnits(policy.coverageAmount, 6),
+          flightNumber: policy.flightNumber,
+          funded: policy.funded,
+          active: policy.active,
+          paidOut: policy.paidOut,
+          requestID: policy.requestID,
+        });
       }
 
+      console.log("Fetched policies:", fetchedPolicies);
       setPolicies(fetchedPolicies);
+      setFilteredPolicies(fetchedPolicies);
       setLoading(false);
     } catch (err) {
       console.error("Error fetching policies:", err);
@@ -126,23 +158,64 @@ export function ViewPoliciesComponent() {
       console.log("Approving USDC spending...");
       const approvalTx = await usdcContract.approve(
         contractAddress,
-        100000000000,
+        100000000000
       );
       console.log("Waiting for approval transaction to confirm...");
       await approvalTx.wait();
       console.log("Approval confirmed!");
 
-
-      // You might want to add USDC approval here if not done elsewhere
       const tx = await contract.fundInsurance(policyId);
       await tx.wait();
 
-      // Refresh policies after successful funding
       await fetchPolicies();
       setProcessingPolicy(null);
     } catch (err) {
       console.error("Error covering policy:", err);
       setError("Failed to cover policy. Please try again.");
+      setProcessingPolicy(null);
+    }
+  };
+
+  const toggleUserPoliciesFilter = () => {
+    if (!userAddress) {
+      setError("Please connect your wallet first.");
+      return;
+    }
+
+    setShowUserPolicies(!showUserPolicies);
+    if (!showUserPolicies) {
+      const userPolicies = policies.filter((policy) => {
+        const travelerMatch =
+          policy.traveler.toLowerCase() === userAddress.toLowerCase();
+        const providerMatch =
+          policy.provider.toLowerCase() === userAddress.toLowerCase();
+        return travelerMatch || providerMatch;
+      });
+      setFilteredPolicies(userPolicies);
+    } else {
+      setFilteredPolicies(policies);
+    }
+  };
+
+  const handleSettlePolicy = async (policyId: number) => {
+    setProcessingPolicy(policyId);
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(
+        contractAddress,
+        contractABI,
+        signer
+      );
+
+      const tx = await contract.initiateSettlement(policyId);
+      await tx.wait();
+
+      await fetchPolicies();
+      setProcessingPolicy(null);
+    } catch (err) {
+      console.error("Error settling policy:", err);
+      setError("Failed to initiate settlement. Please try again.");
       setProcessingPolicy(null);
     }
   };
@@ -156,11 +229,6 @@ export function ViewPoliciesComponent() {
           <SkeletonCard />
           <SkeletonCard />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-4 ">
-          <SkeletonCard />
-          <SkeletonCard />
-          <SkeletonCard />
-        </div>
       </div>
     );
   }
@@ -169,11 +237,11 @@ export function ViewPoliciesComponent() {
     return <div>Error: {error}</div>;
   }
 
-  const policyItems = policies.map((policy) => ({
+  const policyItems = filteredPolicies.map((policy) => ({
     title: `Flight ${policy.flightNumber}`,
     description: (
       <>
-        <p>Cost to Cover: {policy.costToCover} USDC</p>
+        <p>Coverage Amount: {policy.coverageAmount} USDC</p>
         <p>Premium: {policy.premium} USDC</p>
         <p>
           Status:{" "}
@@ -185,41 +253,78 @@ export function ViewPoliciesComponent() {
             ? "Paid Out"
             : "Available"}
         </p>
+        <p>Traveler: {policy.traveler}</p>
+        <p>Provider: {policy.provider}</p>
       </>
     ),
     link: "#",
-    id: policy.id,
-    disabled:
-      processingPolicy === policy.id ||
-      policy.funded ||
-      policy.active ||
-      policy.paidOut,
+    id: policy.policyNumber,
+    traveler: policy.traveler,
+    provider: policy.provider,
+    funded: policy.funded,
+    active: policy.active,
+    paidOut: policy.paidOut,
   }));
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold">Available Policies</h1>
-      <HoverEffect items={policyItems} className="w-full">
-        {(item) => (
-          <div className="p-2">
-            <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-            <div className="text-sm mb-4">{item.description}</div>
-            <Button
-              className="w-full"
-              onClick={() => handleCoverPolicy(item.id)}
-              disabled={item.disabled}
-            >
-              {processingPolicy === item.id ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : item.disabled ? (
-                "Not Available"
-              ) : (
-                "Cover This Policy"
-              )}
-            </Button>
-          </div>
-        )}
-      </HoverEffect>
+      <div className="mb-4">
+        <Button onClick={toggleUserPoliciesFilter}>
+          {showUserPolicies ? "Show All Policies" : "Show My Policies"}
+        </Button>
+      </div>
+      {filteredPolicies.length > 0 ? (
+        <HoverEffect items={policyItems} className="w-full">
+          {(item) => (
+            <div className="p-2">
+              <Badge>Type</Badge>
+              <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
+              <div className="text-sm mb-4">{item.description}</div>
+              {userAddress &&
+                item.traveler &&
+                item.provider &&
+                item.traveler.toLowerCase() !== userAddress.toLowerCase() &&
+                item.provider.toLowerCase() !== userAddress.toLowerCase() &&
+                !item.funded &&
+                !item.paidOut && (
+                  <Button
+                    className="w-full mb-2"
+                    onClick={() => handleCoverPolicy(item.id)}
+                    disabled={processingPolicy === item.id}
+                  >
+                    {processingPolicy === item.id ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      "Cover This Policy"
+                    )}
+                  </Button>
+                )}
+              {userAddress &&
+                item.traveler &&
+                item.provider &&
+                (item.traveler.toLowerCase() === userAddress.toLowerCase() ||
+                  item.provider.toLowerCase() === userAddress.toLowerCase()) &&
+                item.funded &&
+                !item.paidOut && (
+                  <Button
+                    className="w-full"
+                    onClick={() => handleSettlePolicy(item.id)}
+                    disabled={processingPolicy === item.id}
+                  >
+                    {processingPolicy === item.id ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      "Settle Policy"
+                    )}
+                  </Button>
+                )}
+            </div>
+          )}
+        </HoverEffect>
+      ) : (
+        <p>No policies found.</p>
+      )}
     </div>
   );
 }

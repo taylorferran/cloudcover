@@ -196,7 +196,7 @@ export function CreatePolicyComponent() {
 
       {/* Content Section */}
       <div className="relative z-10 max-w-xl w-full space-y-8">
-        <h1 className="relative text-lg md:text-7xl bg-clip-text text-transparent bg-gradient-to-b from-neutral-950 to-neutral-600 text-center font-sans font-bold">
+        <h1 className="relative text-lg md:text-7xl bg-clip-text text-transparent bg-gradient-to-b from-neutral-950 dark:from-white to-neutral-600 dark:to-neutral-300 text-center font-sans font-bold">
           Create Flight Insurance Policy
         </h1>
         <p className="text-neutral-500 max-w-lg mx-auto my-2 text-sm text-center relative z-10">

@@ -9,6 +9,10 @@ export const HoverEffect = ({
   children,
 }: {
   items: {
+    traveler: string | null;
+    provider: any;
+    funded: any;
+    paidOut: any;
     title: string;
     description: string;
     link: string;
@@ -17,6 +21,10 @@ export const HoverEffect = ({
   }[];
   className?: string;
   children: (item: {
+    traveler: string | null;
+    provider: any;
+    funded: any;
+    paidOut: any;
     title: string;
     description: string;
     link: string;
@@ -43,7 +51,7 @@ export const HoverEffect = ({
           <AnimatePresence>
             {hoveredIndex === idx && (
               <motion.span
-                className="absolute inset-0 h-full w-full bg-neutral-200 dark:bg-slate-800 block rounded-3xl"
+                className="absolute inset-0 h-full w-full bg-neutral-200 dark:bg-blue-900 block rounded-3xl"
                 layoutId="hoverBackground"
                 initial={{ opacity: 0 }}
                 animate={{
@@ -74,7 +82,7 @@ export const Card = ({
   return (
     <div
       className={cn(
-        "rounded-2xl h-full w-full p-4 overflow-hidden bg-white border border-slate-800 dark:border-white/[0.2] group-hover:border-slate-700 relative z-20",
+        "rounded-2xl h-full w-full p-4 bg-gradient-to-b dark:from-slate-800 from-neutral-50 to-neutral-200 dark:to-slate-900 overflow-hidden bg-white border border-slate-800 dark:border-white/[0.2] group-hover:border-slate-700 relative z-20",
         className
       )}
     >

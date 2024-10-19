@@ -38,7 +38,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <ContextProvider>
             {/* Your App */}
-            <header className="px-4 lg:px-6 h-14 flex items-center">
+            <header className="container mx-auto px-4 lg:px-6 h-14 flex items-center">
               <NavBar />
             </header>
             <main className="flex-1">{children}</main>
