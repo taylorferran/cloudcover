@@ -1,5 +1,3 @@
----
-
 # CloudCover
 
 ### Decentralized, Peer-to-Peer Flight Insurance on Ethereum
@@ -43,6 +41,11 @@ Travelers request flight insurance by locking in a small premium. Investors, in 
 
 ---
 
+## Project Architecture 
+
+<img width="1632" alt="image" src="https://github.com/user-attachments/assets/ee371d6d-80fe-41fb-b1c2-73f8ca1e467a">
+
+
 ## Features
 
 - **Peer-to-Peer Flight Insurance**: Connect travelers seeking flight insurance with investors willing to fund policies.
@@ -64,6 +67,11 @@ To run CloudCover locally or participate in the platform, you need:
 - An Ethereum testnet or mainnet connection (via Infura, Alchemy, or other providers)
 - A wallet funded with Sepolia ETH and Sepolia USDC (https://faucet.circle.com/)
 
+### Contract Address
+
+Our contract is live and verified to view/interact with on Sepolia!
+[0x415B56a8B3B80b914Bb790ACFF979e28b12e1955](https://sepolia.etherscan.io/address/0x415b56a8b3b80b914bb790acff979e28b12e1955)
+
 ### Installation
 
 1. **Clone the repository**:
@@ -75,14 +83,14 @@ To run CloudCover locally or participate in the platform, you need:
 2. **Install dependencies**:
 
     ```bash
-    cd front-end
-    npm install
+    cd front-end/cloudcover
+    pnpm install
     ```
 
 5. **Run the frontend**:
 
     ```bash
-    npm start
+    pnpm dev
     ```
 
 ---
