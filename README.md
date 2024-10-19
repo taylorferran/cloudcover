@@ -1,5 +1,3 @@
----
-
 # CloudCover
 
 ### Decentralized, Peer-to-Peer Flight Insurance on Ethereum
@@ -63,6 +61,11 @@ To run CloudCover locally or participate in the platform, you need:
 - [MetaMask](https://metamask.io/) or other Web3-enabled browser extension
 - An Ethereum testnet or mainnet connection (via Infura, Alchemy, or other providers)
 - A wallet funded with Sepolia ETH and Sepolia USDC (https://faucet.circle.com/)
+
+### Contract Address
+
+Our contract is live and verified to view/interact with on Sepolia!
+[0x415B56a8B3B80b914Bb790ACFF979e28b12e1955](https://sepolia.etherscan.io/address/0x415b56a8b3b80b914bb790acff979e28b12e1955)
 
 ### Installation
 
