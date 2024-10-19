@@ -190,13 +190,13 @@ export function CreatePolicyComponent() {
   };
 
   return (
-    <div className="relative min-h-screen w-full flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="relative md:min-h-screen w-full flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
       {/* Background Beams */}
       <BackgroundBeams />
 
       {/* Content Section */}
       <div className="relative z-10 max-w-xl w-full space-y-8">
-        <h1 className="relative text-lg md:text-7xl bg-clip-text text-transparent bg-gradient-to-b from-neutral-950 dark:from-white to-neutral-600 dark:to-neutral-300 text-center font-sans font-bold">
+        <h1 className="relative text-3xl md:text-7xl bg-clip-text text-transparent bg-gradient-to-b from-neutral-950 dark:from-white to-neutral-600 dark:to-neutral-300 text-center font-sans font-bold">
           Create Flight Insurance Policy
         </h1>
         <p className="text-neutral-500 max-w-lg mx-auto my-2 text-sm text-center relative z-10">

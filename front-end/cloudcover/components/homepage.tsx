@@ -13,6 +13,8 @@ import {
 import Link from "next/link";
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 import FeaturesSectionDemo from "@/components/blocks/features-section-demo-2";
+import hero from "@/app/public/images/hero_img.png"
+import Image from "next/image";
 
 export function HomepageComponent() {
   return (
@@ -62,9 +64,10 @@ export function HomepageComponent() {
                   clipPath="url(#2ade4387-9c63-4fc4-b754-10e687a0d332)"
                   transform="translate(24 24)"
                 >
-                  <img
-                    alt=""
-                    src="https://tailwindui.com/plus/img/component-images/mobile-app-screenshot.png"
+                  <Image
+                  priority
+                    alt="hero"
+                  src={hero}
                   />
                 </foreignObject>
               </svg>
