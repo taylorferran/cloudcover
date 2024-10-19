@@ -99,7 +99,7 @@ This contract handles the following:
 - **Automatic Payouts**: If a flight is canceled, the traveler gets paid automatically, while the investor earns the premium if the flight lands as scheduled.
 
 ### Oracle Integration
-CloudCover uses decentralized oracles (e.g., Chainlink, iExec) to track real-time flight status. The flight status is fed into the smart contract, which triggers automatic payouts based on the oracle's data.
+CloudCover uses decentralized oracles (e.g., Chainlink/Blocksense) to track real-time flight status. The flight status is fed into the smart contract, which triggers automatic payouts based on the oracle's data.
 
 ### Stablecoin Integration
 All transactions are done using **USDC** to provide price stability. The smart contract interacts with the ERC-20 USDC token standard for premiums, coverage, and payouts.
@@ -112,7 +112,7 @@ All transactions are done using **USDC** to provide price stability. The smart c
 - **React**: Frontend framework for building the CloudCover user interface.
 - **Ethers.js**: To interact with the Ethereum blockchain from the frontend.
 - **Remix**: Ethereum development environment to write and deploy the smart contract.
-- **Blocksense**: Decentralized oracles for real-time flight data.
+- **Chainlink/Blocksense**: Decentralized oracles for real-time flight data.
 ---
 
 ## License
@@ -121,7 +121,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**CloudCover** - Decentralizing flight insurance for a transparent, automated, and gamified experience. Powered by Ethereum, secured by smart contracts, and governed by the community.
+**CloudCover** - Decentralizing flight insurance for a transparent, automated, and gamified experience.
 
 ---
 
