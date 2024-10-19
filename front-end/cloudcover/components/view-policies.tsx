@@ -47,12 +47,12 @@ const contractABI = [
     inputs: [
       { internalType: "uint64", name: "subscriptionId", type: "uint64" },
       { internalType: "string[]", name: "args", type: "string[]" },
-      { internalType: "uint256", name: "policyId", type: "uint256" }
+      { internalType: "uint256", name: "policyId", type: "uint256" },
     ],
     name: "sendRequest",
     outputs: [{ internalType: "bytes32", name: "requestId", type: "bytes32" }],
     stateMutability: "nonpayable",
-    type: "function"
+    type: "function",
   },
 ];
 const contractAddress = "0x415B56a8B3B80b914Bb790ACFF979e28b12e1955";
@@ -283,7 +283,7 @@ export function ViewPoliciesComponent() {
         <HoverEffect items={policyItems} className="w-full">
           {(item) => (
             <div className="p-2">
-              <Badge>Type</Badge>
+              {/* <Badge>Type</Badge> */}
               <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
               <div className="text-sm mb-4">{item.description}</div>
               {userAddress &&
@@ -314,7 +314,9 @@ export function ViewPoliciesComponent() {
                 !item.paidOut && (
                   <Button
                     className="w-full"
-                    onClick={() => handleSettlePolicy(item.id, item.flightNumber)}
+                    onClick={() =>
+                      handleSettlePolicy(item.id, item.flightNumber)
+                    }
                     disabled={processingPolicy === item.id}
                   >
                     {processingPolicy === item.id ? (

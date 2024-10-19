@@ -106,7 +106,7 @@ export function HomepageComponent() {
           </div>
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
-              Support center
+              About us
             </h2>
             <p className="mt-6 text-lg leading-8 text-gray-300">
               CloudCover is revolutionizing the traditional flight insurance
