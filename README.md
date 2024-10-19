@@ -78,14 +78,14 @@ Our contract is live and verified to view/interact with on Sepolia!
 2. **Install dependencies**:
 
     ```bash
-    cd front-end
-    npm install
+    cd front-end/cloudcover
+    pnpm install
     ```
 
 5. **Run the frontend**:
 
     ```bash
-    npm start
+    pnpm dev
     ```
 
 ---
