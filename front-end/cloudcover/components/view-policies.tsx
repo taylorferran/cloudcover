@@ -280,6 +280,7 @@ export function ViewPoliciesComponent() {
         </Button>
       </div>
       {filteredPolicies.length > 0 ? (
+        //@ts-ignore
         <HoverEffect items={policyItems} className="w-full">
           {(item) => (
             <div className="p-2">
